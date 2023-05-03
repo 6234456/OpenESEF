@@ -81,6 +81,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.16.1</version>
+        </dependency>
+        <dependency>
             <groupId>eu.qiou.aaf4k</groupId>
             <artifactId>aaf4k-base</artifactId>
             <version>1.0-SNAPSHOT</version>

@@ -4,6 +4,11 @@ import org.xml.sax.Attributes
 import org.xml.sax.helpers.DefaultHandler
 import java.lang.StringBuilder
 
+
+/**
+@author Xiou Yang
+@seeb  Tables of Annexes IV and VI  https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L:2022:339:FULL
+ */
 class ESEFAllHandler: DefaultHandler() {
 
     val roles = mutableListOf<RoleType>()
@@ -14,8 +19,6 @@ class ESEFAllHandler: DefaultHandler() {
     private var isDefinition = false
     private var isCal = false
     private var isValidate = false
-
-
 
     @Override
     override fun startElement(uri: String?, localName: String?, qName: String?, attributes: Attributes?) {

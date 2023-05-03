@@ -52,7 +52,7 @@ class ESEFCalHandler(val roleType: Map<String, RoleType>, val element: Map<Strin
                 val lTo = attributes.getValue("xlink:to")
 
                 if (!cals.containsKey(lFrom)){
-                    cals[lFrom] = Calculation()
+                    cals[lFrom] = Calculation(lFrom)
                 }else{
                     cals[lFrom]!!.list.add(CalculationArc(order,weight,lFrom,lTo))
                 }

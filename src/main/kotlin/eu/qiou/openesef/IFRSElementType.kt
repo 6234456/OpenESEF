@@ -1,8 +1,8 @@
 package eu.qiou.openesef
 
 enum class IFRSElementType {
-    STRING,
-    DOMAIN,
+    STRING, // Text
+    DOMAIN, // Member as in the REGULATION
     MONETARY,
     PERCENT,
     DURATION,
