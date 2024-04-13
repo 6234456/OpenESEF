@@ -5,25 +5,44 @@ import org.xml.sax.helpers.DefaultHandler
 
 /**
  *  calculationLink
+ *  description:  the link:calculationLink element is used to define face of financial statements and tables
  *
  *  two types of element of Calculation
  *
  *  - link:loc    with  xlink:label   as variable name for the components
  *
  *  - link:calculationArc
- *  xlink:from   item to be calculated
- *  xlink:to     components employed in the calculation
+ *  xlink:from   item to be calculated  ->  the supper class of xlink:to
+ *  xlink:to     components employed in the calculation ->  the children of xlink:from
  *  order       position order of element
  *  weight      multiplier of the component
+ *
+ *  roleType
+ *  - id    unique identifier of the role type == disclosure type in the ESEF like BS PL
+ *  - name of the role type
  */
 
 
 class ESEFCalHandler(val roleType: Map<String, RoleType>, val element: Map<String, IFRSElement>): DefaultHandler() {
 
-    private lateinit var res: RoleType
+    private lateinit var role: RoleType
     private val map =  mutableMapOf<String, IFRSElement>()
-    private lateinit var cals: MutableMap<String, Calculation>
+    private lateinit var cals: MutableList<CalculationArc>
 
+    val calculations:MutableMap<RoleType, Map<IFRSElement, Calculation>>  = mutableMapOf()
+
+    @Override
+    override fun endElement(uri: String?, localName: String?, qName: String?) {
+        when(qName!!){
+            "link:calculationLink", "calculationLink" -> {
+                calculations[role] =
+                    cals.groupBy { it.fromRef }.map { map[it.key]!! to  Calculation(it.value.map { x->
+                        IFRSCalculationComponent( map[x.toRef]!!, x.weight, x.order)
+                    }) }
+                        .toMap().toMutableMap()
+            }
+        }
+    }
 
     @Override
     override fun startElement(uri: String?, localName: String?, qName: String?, attributes: Attributes?) {
@@ -31,8 +50,8 @@ class ESEFCalHandler(val roleType: Map<String, RoleType>, val element: Map<Strin
             "link:calculationLink", "calculationLink" -> {
                 val id = attributes!!.getValue("xlink:role").split("/").last()
 
-                res = roleType[id] ?: throw Exception("Unknown id in the definition: $id")
-                cals = mutableMapOf()
+                role = roleType[id] ?: throw Exception("Unknown id in the definition: $id")
+                cals = mutableListOf()
                 map.clear()
             }
             "link:loc", "loc" -> {
@@ -51,11 +70,7 @@ class ESEFCalHandler(val roleType: Map<String, RoleType>, val element: Map<Strin
                 val lFrom = attributes.getValue("xlink:from")
                 val lTo = attributes.getValue("xlink:to")
 
-                if (!cals.containsKey(lFrom)){
-                    cals[lFrom] = Calculation(lFrom)
-                }else{
-                    cals[lFrom]!!.list.add(CalculationArc(order,weight,lFrom,lTo))
-                }
+                cals.add(CalculationArc(order,weight,lFrom,lTo))
             }
         }
     }

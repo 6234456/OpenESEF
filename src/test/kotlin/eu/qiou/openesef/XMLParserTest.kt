@@ -17,8 +17,15 @@ internal class XMLParserTest {
             )
 
         println(all.roles[15])
+        val ifrs = IFRSElementHandler()
+        XMLParser().parse("src/main/resources/esef_taxonomy_2021/www.esma.europa.eu/taxonomy/ext/full_ifrs-cor_2021-03-24.xsd", ifrs)
 
-        ExcelUtil.writeData("demo.xlsx", data = all.roles.associate { it.toList().let { x -> x.first() to x } })
+        val calHandler = ESEFCalHandler(all.roles.associateBy { it.id }, ifrs.elements.associateBy { it.id })
+        XMLParser().parse("src/main/resources/esef_taxonomy_2021/www.esma.europa.eu/taxonomy/2021-03-24/esef_all-cal.xml", calHandler)
+        println(calHandler.calculations)
+
+
+        // ExcelUtil.writeData("demoIFRS.xlsx", data = ifrs.elements.associate { it.toList().let { x -> x.first() to x } })
     }
 
     //
