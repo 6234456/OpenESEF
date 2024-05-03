@@ -35,6 +35,7 @@ internal class XMLParserTest {
         XMLParser().parse("src/main/resources/esef_taxonomy_2021/www.esma.europa.eu/taxonomy/ext/full_ifrs-cor_2021-03-24.xsd", ifrs)
 
         // ExcelUtil.writeData("demoIFRS.xlsx", data = ifrs.elements.associate { it.toList().let { x -> x.first() to x } })
-        println((CoreTaxonomyHint.fetch("https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L:2022:339:FULL").keys).minus(ifrs.elements.map { it.name }.toSet()))
+        //println((CoreTaxonomyHint.fetch("https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L:2022:339:FULL").keys).minus(ifrs.elements.map { it.name }.toSet()))
+        println((CoreTaxonomyHint.fetch("https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L:2022:339:FULL")))
     }
 }

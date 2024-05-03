@@ -1,6 +1,5 @@
 package eu.qiou.openesef.util
 
-import eu.qiou.openesef.IFRSElementType
 import org.jsoup.Jsoup
 
 object CoreTaxonomyHint {
